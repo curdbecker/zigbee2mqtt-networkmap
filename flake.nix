@@ -1,5 +1,5 @@
 {
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/25.11";
 
   outputs =
     inputs@{ ... }:
@@ -27,7 +27,7 @@
           default = pkgs.mkShellNoCC {
             offlineCache = pkgs.fetchYarnDeps {
               src = builtins.filterSource (path: type: type == "regular" && baseNameOf path == "yarn.lock") ./.;
-              hash = "sha256-uYZndaaGPKF9jK475QJcOTtcpnfOFezhrhwhqX4rLGA=";
+              hash = "sha256-8YYOieQBLGWJexXUFCXJ3TTonT9stN0OK2ekicDE8y4=";
             };
             nativeBuildInputs = [ pkgs.yarnConfigHook ];
             packages = with pkgs; [
