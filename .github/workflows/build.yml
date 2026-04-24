@@ -37,12 +37,16 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
+        set -x
         FILES=""
         if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
           FILES=$(gh api "repos/$GITHUB_REPOSITORY/pulls/${{ github.event.pull_request.number }}/files" --jq '.[].filename')
         elif [ "$GITHUB_EVENT_NAME" = "push" ]; then
           BEFORE_SHA="${{ github.event.before }}"
           AFTER_SHA="${{ github.event.after }}"
+          if ! gh api "repos/$GITHUB_REPOSITORY/commits/$AFTER_SHA" >/dev/null 2>&1; then
+            AFTER_SHA="$GITHUB_SHA"
+          fi
           if [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
             FILES=$(gh api "repos/$GITHUB_REPOSITORY/commits/$AFTER_SHA" --jq '.files[].filename')
           else
